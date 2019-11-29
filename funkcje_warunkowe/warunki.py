@@ -10,4 +10,4 @@
 # parzysta czy nie
 
 liczba = int(input("podaj liczbe "))
-print(liczba, " jest parzysta") if (liczba%2 == 0) else print(liczba, " jest nieparzysta")
+print(liczba, " jest parzysta") if (licpzba%2 == 0) else print(liczba, " jest nieparzysta")
