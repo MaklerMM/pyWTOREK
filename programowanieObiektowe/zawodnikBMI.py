@@ -26,3 +26,10 @@ p5 = Player("Władek", "Mors", "Mamry", 76, 171)
 players = [p1, p2, p3, p4, p5]
 for player in players:
     print(player)
+
+def findPlayerById(findId):
+    for player in players:
+        if(player.id == findId):
+            print(player)
+print()
+findPlayerById(2)
