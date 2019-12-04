@@ -1,0 +1,120 @@
+import hashlib
+
+from programowanieObiektowe.employee_mgm.model.Employee import Permission, Employee
+from programowanieObiektowe.employee_mgm.model.Trainee import Trainee
+
+class CompanyController:
+    employees = [
+        Employee("mk1", "mk1", "PYTHON DEV", 11000, Permission.ROLE_EMPL),
+        Employee("mk2", "mk2", "JAVA DEV", 9000, Permission.ROLE_EMPL),
+        Employee("mk3", "mk3", "PYTHON DEV", 12000, Permission.ROLE_MAN),
+        Employee("mk4", "mk4", "MANAGER", 14000, Permission.ROLE_MAN),
+        Employee("mk5", "mk5", "SCRUM MASTER", 13000, Permission.ROLE_MAN),
+        Employee("mk6", "mk6", "HEAD", 17000, Permission.ROLE_HEAD),
+        Employee("mk7", "mk7", "HEAD", 21000, Permission.ROLE_HEAD),
+        Employee("mk8", "mk8", "DEV OPS", 11500, Permission.ROLE_EMPL),
+        Trainee("t1", "t1"),
+        Trainee("t2", "t2"),
+        Trainee("t3", "t3")
+    ]
+# dodawanie pracownika lub praktykanta z unikatowym loginem
+
+    def addEmployeeOrTrainee(self, o):
+        if(o.__class__.__name__== "Trainee" or o.__class__.__name__ == "Employee"):
+            if(self.loginValid(o.login)):
+                print("Dodano Pracownika\n", o)
+                self.employees.append(o)
+            else:
+                print("Istnieje już taki login w bazie danych\n")
+        else:
+            print("Dany obiekt nie jest pracownikiem ani praktykantem\n")
+
+
+# walidacja loginu
+
+    def loginValid(self, login):
+        for e in self.employees:
+            if(e.login == login):
+                return False
+        return True
+
+#2. wyświetlenie wszystkich pracowników i praktykantów posortowanych po pensji DESC
+    def getEmployees(self):
+        for e in sorted(self.employees, key=lambda e : e.salary, reverse=True):
+            print(e)
+
+#3. wyswietlenie tylko kierownikow posortowanych po loginie A-Z
+    def getManagersAndHeadsOrderByLoginASC(self):
+        for e in self.employees:
+            if(e.__class__.__name__ == "Employee"):
+                if(e.permission.value in [2,3]):
+                    print(e)
+# result = filter(lambda e:e.__class__.__name__ == "Employee" and e.permission.value in [2,3], self.employees)
+# for i in sorted(result, key=lambda e:e.login, reverse=False):
+#   print(i)
+
+#4. wyswietlenie praktykantow posortowanych po loginie Z-A
+    def getTraineeOrderByLogin(self):
+        result = filter(lambda e : e.__class__.__name__ == "Trainee", self.employees)
+        for t in sorted(result, key=lambda t : t.login, reverse=True):
+            print(t)
+
+
+# przypisanie nagrody do pracownika lub praktykanta po loginie, a jesli nie podamy loginu, to premia dla wszystkich
+    def setPrise(self, amount, login=""):
+        if (login !=""):
+            isLogin = False
+            # wyszukaj pracownika
+            for e in self.employees:
+                if(e.login == login):
+                    e.assignPrise(amount)
+                    isLogin = True
+                    break
+            if(isLogin==False):
+                print("Nie ma takiego pracownika")
+        else:
+            for e in self.employees:
+                e.assignPrise(amount)
+        self.getEmployees()
+
+# zmiana pensji tylko dla pracownika
+    def changeEmployeeSalary(self, login, salary):
+        isEmployee = False
+        for e in self.employees:
+            if(e.login == login and e.__class__.__name__ == "Employee"):
+                e.salary = salary
+                isEmployee == True
+                break
+        if(isEmployee == False):
+            print("Nie ma takiego pracownika")
+        self.getEmployees()
+
+
+#usuwanie pracownika lub praktykanta z listy
+    def deleteEmployee(self, login):
+        isEmployee = False
+        for e in self.employees:
+            if(e.login == login):
+                isEmployee = True
+                self.employees.remove(e)
+                print("Usunięto", e.possition)
+                break
+        if(isEmployee == False):
+            print("Nie ma takiego pracownika")
+        self.getEmployees()
+# usuwanie z potwierdzeniem
+    def deleteEmployeeWithConfirm(self, login):
+        isEmployee = False
+        for e in self.employees:
+            if(e.login == login):
+                isEmployee = True
+                if e.password == hashlib.md5(('salt:ABC' + input('potwierdz usuwanie hasłem ').strip(" ")).encode('utf-8')).hexdigest():
+                    self.employees.remove(e)
+                    print("Usunięto ", e.possition)
+                    break
+                else:
+                    print("błąd potwierdzania")
+        if(isEmployee == False):
+            print("Nie ma takiego pracownika")
+        self.getEmployees()
+
