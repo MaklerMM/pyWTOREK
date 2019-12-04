@@ -14,9 +14,18 @@ print(dataBase)
 print(getConnection())
 h = Hello("MM")
 print("\n")
-for i in dir(rnd):
+# for i in dir(rnd):
+#     print(i)
+
+# help(rnd)
+
+import os
+
+print("Direct ref ", os.getcwd())
+print(("W katalogu, w ktorym sie znajdujemy aktualnie: "))
+for i in os.listdir('.'):
     print(i)
 
-help(rnd)
-
-
+print(("W katalogu pracownikow jest cos takiego: "))
+for i in os.listdir("C:\\Users\\user\\Desktop\\REAKTOR\\PYTHON\\firstPython\\programowanieObiektowe\\employee_mgm"):
+    print(i)
