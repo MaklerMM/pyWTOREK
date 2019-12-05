@@ -29,3 +29,8 @@ for i in os.listdir('.'):
 print(("W katalogu pracownikow jest cos takiego: "))
 for i in os.listdir("C:\\Users\\user\\Desktop\\REAKTOR\\PYTHON\\firstPython\\programowanieObiektowe\\employee_mgm"):
     print(i)
+
+os.chdir("C:\\Users\\user\\Desktop") # change directory
+for file in os.listdir('.'):         # list directory w aktualnej lokalizacji
+    print(file)
+
